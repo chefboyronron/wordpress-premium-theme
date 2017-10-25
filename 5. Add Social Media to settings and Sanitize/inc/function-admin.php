@@ -27,13 +27,16 @@ function sunset_custom_settings(){
 
 	register_setting( 'sunset-settings-group', 'first_name' );
 	register_setting( 'sunset-settings-group', 'last_name' );
+	register_setting( 'sunset-settings-group', 'user_description', 'sunset_sanitize_input');
 	register_setting( 'sunset-settings-group', 'twitter_handler' , 'sunset_sanitize_twitter_handler');
 	register_setting( 'sunset-settings-group', 'facebook_handler' );
 	register_setting( 'sunset-settings-group', 'gplus_handler' );
 
+
 	add_settings_section( 'sunset-sidebar-options', 'Sidebar Option', 'sunset_sidebar_options', 'ronnn_sunset' );
 
 	add_settings_field( 'sidebar-name', 'Full Name', 'sunset_sidebar_name', 'ronnn_sunset', 'sunset-sidebar-options' );
+	add_settings_field( 'sidebar-description', 'Description', 'sunset_sidebar_description', 'ronnn_sunset', 'sunset-sidebar-options' );
 	add_settings_field( 'sidebar-twitter', 'Tweeter Handler', 'sunset_sidebar_twitter', 'ronnn_sunset', 'sunset-sidebar-options' );
 	add_settings_field( 'sidebar-facebook', 'Facebook Handler', 'sunset_sidebar_facebook', 'ronnn_sunset', 'sunset-sidebar-options' );
 	add_settings_field( 'sidebar-gplus', 'Google+ Handler', 'sunset_sidebar_gplus', 'ronnn_sunset', 'sunset-sidebar-options' );
@@ -50,6 +53,14 @@ function sunset_sidebar_name(){
 	echo '
 		<input type="text" name="first_name" value="'.$firstName.'" placeholder="First Name" />
 		<input type="text" name="last_name" value="'.$lastName.'" placeholder="Last Name" />
+	';
+}
+
+function sunset_sidebar_description(){
+	$description = esc_attr( get_option( 'user_description' ) );
+	echo '
+		<textarea name="user_description" cols="30" rows="5">'.$description.'</textarea>
+		<p class="des">Write something smart.</p>
 	';
 }
 
@@ -82,6 +93,11 @@ function sunset_sidebar_gplus(){
 function sunset_sanitize_twitter_handler( $input ){
 	$output = sanitize_text_field( $input );
 	$output = str_replace('@', '', $output);
+	return $output;
+}
+
+function sunset_sanitize_input( $input ){
+	$output = sanitize_text_field( $input );
 	return $output;
 }
 
